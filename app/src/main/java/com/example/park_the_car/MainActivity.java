@@ -159,6 +159,18 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mediaBG.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mediaBG.start();
+    }
+
+    @Override
     public void YesClicked() {
         gameView.resetGame();
         i = 0;
