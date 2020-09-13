@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
     private Button soundBtn;
 
-    private MediaPlayer mediaCoin,mediaCrash,mediaBG,mediaNoice;
+    private MediaPlayer mediaCoin, mediaCrash, mediaBG, mediaNoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +38,19 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
         //crashIndex = null;
 
-        mediaCoin = MediaPlayer.create(this,R.raw.sound_coin);
-        mediaCrash = MediaPlayer.create(this,R.raw.sound_crash);
-        mediaBG = MediaPlayer.create(this,R.raw.sound_background);
-        mediaNoice = MediaPlayer.create(this,R.raw.sound_noice);
+        mediaCoin = MediaPlayer.create(this, R.raw.sound_coin);
+        mediaCrash = MediaPlayer.create(this, R.raw.sound_crash);
+        mediaBG = MediaPlayer.create(this, R.raw.sound_background);
+        mediaNoice = MediaPlayer.create(this, R.raw.sound_noice);
 
         mediaBG.setLooping(true);
         mediaBG.start();
 
         gameView.setCoordinatesListener(new GameView.OnCoordinateUpdate() {
             @Override
-            public void onUpdate(float X, float Y, boolean isMove,boolean notFinish) {
+            public void onUpdate(float X, float Y, boolean isMove, boolean notFinish) {
 
-                carCoordinates.add(new CarCoordinate(X,Y));
+                carCoordinates.add(new CarCoordinate(X, Y));
 
                 /*if (X > (gameView.canvasWidth() / 2) - gameView.treeWidth() - 50 && X < (gameView.canvasWidth() / 2) - 50 && Y > (gameView.canvasHeight() / 2) - 400 && Y < (gameView.canvasHeight() / 2) + gameView.treeHeight() - 400 && crashIndex == null && carCoordinates.size()>15) {
                     crashIndex = new CarCoordinate(carCoordinates.get(carCoordinates.size()-15).getCoordinateX(),carCoordinates.get(carCoordinates.size()-6).getCoordinateY());
@@ -60,16 +60,16 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
                     crashIndex = new CarCoordinate(carCoordinates.get(carCoordinates.size()-15).getCoordinateX(),carCoordinates.get(carCoordinates.size()-6).getCoordinateY());
                 }*/
 
-                if(notFinish){
+                if (notFinish) {
                     carCoordinates.clear();
                 }
 
-                if(isMove && !notFinish){
+                if (isMove && !notFinish) {
 
-                    CountDownTimer countDownTimer = new CountDownTimer(carCoordinates.size()*50,50) {
+                    CountDownTimer countDownTimer = new CountDownTimer(carCoordinates.size() * 50, 50) {
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            if(continueMove) {
+                            if (continueMove) {
                                 float cordX = carCoordinates.get(i).getCoordinateX();
                                 float cordY = carCoordinates.get(i).getCoordinateY();
 
@@ -94,14 +94,14 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
                                 if (cordX > (gameView.canvasWidth() / 2) - gameView.treeWidth() - 50 && cordX < (gameView.canvasWidth() / 2) - 50 && cordY > (gameView.canvasHeight() / 2) - 400 && cordY < (gameView.canvasHeight() / 2) + gameView.treeHeight() - 400) {
                                     gameView.setTreeTouched();
-                                        mediaCrash.start();
+                                    mediaCrash.start();
 
                                     continueMove = false;
                                 }
 
                                 if (cordX > (gameView.canvasWidth() / 2) + 50 && cordX < (gameView.canvasWidth() / 2) + gameView.treeWidth() + 50 && cordY > (gameView.canvasHeight() / 2) + 400 && cordY < (gameView.canvasHeight() / 2) + gameView.treeHeight() + 400) {
                                     gameView.setTreeTouched();
-                                        mediaCrash.start();
+                                    mediaCrash.start();
                                     continueMove = false;
                                 }
                             }
@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
                         @Override
                         public void onFinish() {
-                            gameView.setPathLine(gameView.canvasWidth()/2,0);
+                            gameView.setPathLine(gameView.canvasWidth() / 2, 0);
                             openDialog();
-                            if(continueMove) {
+                            if (continueMove) {
                                 mediaNoice.start();
                             }
                         }
@@ -123,12 +123,11 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
         soundBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(volumeOn){
+                if (volumeOn) {
                     soundBtn.setBackgroundResource(R.drawable.ic_volumeoff);
                     mediaBG.pause();
                     volumeOn = false;
-                }
-                else {
+                } else {
                     soundBtn.setBackgroundResource(R.drawable.ic_volumeon);
                     mediaBG.start();
                     volumeOn = true;
@@ -137,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
         });
     }
 
-    public void openDialog(){
-        CountDownTimer countDownTimer = new CountDownTimer(2000,1000) {
+    public void openDialog() {
+        CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
             @Override
             public void onFinish() {
                 GameEndDialog gameEndDialog = new GameEndDialog();
-                gameEndDialog.show(getSupportFragmentManager(),"Game Over");
+                gameEndDialog.show(getSupportFragmentManager(), "Game Over");
             }
         }.start();
     }
@@ -155,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        mediaBG.stop();
         finish();
     }
 

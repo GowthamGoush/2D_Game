@@ -31,9 +31,12 @@ public class GameEndDialog extends AppCompatDialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 gameEndListener.YesClicked();
             }
-        });
+        }).setCancelable(false);
 
-        return builder.create();
+        Dialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
+
     }
 
     public interface GameEndListener{
