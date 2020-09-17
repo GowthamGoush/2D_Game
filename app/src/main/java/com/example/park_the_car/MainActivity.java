@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements GameEndDialog.GameEndListener {
+public class MainActivity extends AppCompatActivity implements GameEndDialog.GameEndListener,GameFinishDialog.GameFinishListener {
 
     private GameView gameView;
     private ArrayList<CarCoordinate> carCoordinates;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
                 if (isMove && !notFinish) {
 
-                    CountDownTimer countDownTimer = new CountDownTimer(carCoordinates.size() * 50, 50) {
+                    final CountDownTimer countDownTimer = new CountDownTimer(carCoordinates.size() * 100, 100) {
                         @Override
                         public void onTick(long millisUntilFinished) {
                             if (continueMove) {
@@ -96,21 +96,35 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
                                     gameView.setTreeTouched();
                                     mediaCrash.start();
 
+                                    GameEndDialog gameEndDialog = new GameEndDialog();
+                                    gameEndDialog.show(getSupportFragmentManager(), "Game Over");
+
                                     continueMove = false;
+
+                                    this.cancel();
+
                                 }
 
                                 if (cordX > (gameView.canvasWidth() / 2) + 50 && cordX < (gameView.canvasWidth() / 2) + gameView.treeWidth() + 50 && cordY > (gameView.canvasHeight() / 2) + 400 && cordY < (gameView.canvasHeight() / 2) + gameView.treeHeight() + 400) {
                                     gameView.setTreeTouched();
                                     mediaCrash.start();
+
+                                    GameEndDialog gameEndDialog = new GameEndDialog();
+                                    gameEndDialog.show(getSupportFragmentManager(), "Game Over");
+
                                     continueMove = false;
+
+                                    this.cancel();
                                 }
                             }
                         }
 
                         @Override
                         public void onFinish() {
-                            gameView.setPathLine(gameView.canvasWidth() / 2, 0);
+
+                            gameView.setPathLine(gameView.canvasWidth() / 2, gameView.carHeight()/2);
                             openDialog();
+
                             if (continueMove) {
                                 mediaNoice.start();
                             }
@@ -145,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
             @Override
             public void onFinish() {
-                GameEndDialog gameEndDialog = new GameEndDialog();
-                gameEndDialog.show(getSupportFragmentManager(), "Game Over");
+                GameFinishDialog gameFinishDialog = new GameFinishDialog();
+                gameFinishDialog.show(getSupportFragmentManager(), "Game Finish");
             }
         }.start();
     }
@@ -172,6 +186,16 @@ public class MainActivity extends AppCompatActivity implements GameEndDialog.Gam
 
     @Override
     public void YesClicked() {
+        gameView.resetGame();
+        i = 0;
+        carCoordinates.clear();
+        continueMove = true;
+        coin1Touched = false;
+        coin2Touched = false;
+    }
+
+    @Override
+    public void finishYesClicked() {
         gameView.resetGame();
         i = 0;
         carCoordinates.clear();

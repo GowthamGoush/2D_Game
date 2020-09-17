@@ -122,7 +122,7 @@ public class GameView extends View {
 
         if(count == 1 ) {
             posX = x - (car.getWidth() / 2);
-            posY = y;
+            posY = y - (car.getHeight() / 2);
             carMoves = true;
             invalidate();
         }
@@ -150,6 +150,10 @@ public class GameView extends View {
 
     public float treeHeight(){
         return tree.getHeight()-10;
+    }
+
+    public float carHeight(){
+        return car.getHeight();
     }
 
     public void setCoin1Touched(){
